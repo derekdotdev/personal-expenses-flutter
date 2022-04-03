@@ -37,7 +37,7 @@ class NewTransaction extends StatelessWidget {
               decoration: const InputDecoration(
                 labelText: 'Title',
               ),
-              onSubmitted: (val) => submitData,
+              onSubmitted: (_) => submitData(),
             ),
             // Amount
             TextField(
@@ -48,7 +48,7 @@ class NewTransaction extends StatelessWidget {
               decoration: const InputDecoration(
                 labelText: 'Amount',
               ),
-              onSubmitted: (val) => submitData,
+              onSubmitted: (_) => submitData(),
             ),
             TextButton(
               onPressed: submitData,
