@@ -16,22 +16,26 @@ class NewTransaction extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            // Title
             TextField(
               controller: titleController,
               // onChanged: (value) {
               //   titleInput = value;
               // },
               cursorColor: Colors.purple,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Title',
-                hintStyle: TextStyle(color: Colors.purple),
+                hintStyle: const TextStyle(color: Colors.purple),
               ),
             ),
+            // Amount
             TextField(
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               controller: amountController,
               // onChanged: (val) => amountInput = val,
               cursorColor: Colors.purple,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Amount',
               ),
             ),
