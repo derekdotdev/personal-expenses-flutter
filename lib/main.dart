@@ -4,9 +4,7 @@ import './widgets/transaction_list.dart';
 import './widgets/chart.dart';
 import './models/transaction.dart';
 
-void main() {
-  runApp() => MyApp;
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -17,6 +15,24 @@ class MyApp extends StatelessWidget {
       title: 'Personal Expenses',
       theme: ThemeData(
         primarySwatch: Colors.purple,
+        // colorScheme: const ColorScheme.light(
+        //   primary: Colors.purple,
+        //   secondary: Colors.amber,
+        // ),
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.purple,
+          accentColor: Colors.amber,
+        ),
+        textTheme: ThemeData.light().textTheme.copyWith(
+              headline6: const TextStyle(
+                fontFamily: 'OpenSans',
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+              button: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
         fontFamily: 'Quicksand',
         appBarTheme: const AppBarTheme(
           titleTextStyle: TextStyle(
@@ -50,11 +66,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String txTitle, double txAmount) {
+  void _addNewTransaction(
+      String txTitle, double txAmount, DateTime chosenDate) {
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
-      date: DateTime.now(),
+      date: chosenDate,
       id: DateTime.now().toString(),
     );
 
@@ -100,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.amber,
-        splashColor: Colors.purple,
+        splashColor: Theme.of(context).primaryColor,
         child: const Icon(Icons.add),
         onPressed: () => _startAddNewTransaction(context),
       ),
