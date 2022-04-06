@@ -12,6 +12,8 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeErrorColor = Theme.of(context).errorColor;
+
     return transactions.isEmpty
         ? LayoutBuilder(builder: (ctx, constraints) {
             return Column(
@@ -66,9 +68,9 @@ class TransactionList extends StatelessWidget {
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete),
-                    color: Theme.of(context).errorColor,
+                    color: themeErrorColor,
                     onPressed: () => deleteTx(transactions[index].id),
-                  ), // Implement trash can IconButton to delete
+                  ),
                 ),
               );
             },
