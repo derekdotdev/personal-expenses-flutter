@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import './widgets/new_transaction.dart';
 import './widgets/transaction_list.dart';
@@ -15,7 +15,7 @@ void main() {
   //   DeviceOrientation.portraitUp,
   //   DeviceOrientation.portraitDown,
   // ]);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -102,6 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _startAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
+      isScrollControlled: true,
       context: ctx,
       builder: (bCtx) {
         return NewTransaction(_addNewTransaction);
@@ -114,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var mediaQuery = MediaQuery.of(context);
     final _isLandscape = mediaQuery.orientation == Orientation.landscape;
 
-    final appBar = AppBar(
+    final PreferredSizeWidget appBar = AppBar(
       title: const Text('Personal Expenses'),
       actions: [
         IconButton(
@@ -122,14 +123,6 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () => _startAddNewTransaction(context),
         )
       ],
-    );
-
-    final txListWidget = SizedBox(
-      height: (mediaQuery.size.height -
-              mediaQuery.padding.top -
-              appBar.preferredSize.height) *
-          0.7,
-      child: TransactionList(_userTransactions, _deleteTransaction),
     );
 
     return Scaffold(
@@ -164,7 +157,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     0.3,
                 child: Chart(_recentTransactions),
               ),
-            if (!_isLandscape) txListWidget,
+            if (!_isLandscape)
+              SizedBox(
+                height: (mediaQuery.size.height -
+                        mediaQuery.padding.top -
+                        appBar.preferredSize.height) *
+                    0.7,
+                child: TransactionList(_userTransactions, _deleteTransaction),
+              ),
             if (_isLandscape)
               _showChart
                   ? SizedBox(
@@ -175,7 +175,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Chart(_recentTransactions),
                     )
                   // List of Transactions
-                  : txListWidget,
+                  : SizedBox(
+                      height: (mediaQuery.size.height -
+                              mediaQuery.padding.top -
+                              appBar.preferredSize.height) *
+                          0.7,
+                      child: TransactionList(
+                          _userTransactions, _deleteTransaction),
+                    ),
           ],
         ),
       ),

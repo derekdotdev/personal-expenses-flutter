@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -14,6 +17,7 @@ class _NewTransactionState extends State<NewTransaction> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
+  DateTime date = DateTime.now();
 
   void _submitData() {
     final _enteredTitle = _titleController.text;
@@ -36,7 +40,7 @@ class _NewTransactionState extends State<NewTransaction> {
     Navigator.of(context).pop();
   }
 
-  void _presentDatePicker() {
+  void _presentMaterialDatePicker() {
     showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -50,6 +54,32 @@ class _NewTransactionState extends State<NewTransaction> {
         _selectedDate = pickedDate;
       });
     });
+  }
+
+  void _presentCupertinoDatePicker() {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => Container(
+        height: 200,
+        padding: const EdgeInsets.only(top: 6.0),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        // Use a SafeArea widget to avoid system overlaps
+        child: SafeArea(
+          top: false,
+          child: CupertinoDatePicker(
+            initialDateTime: date,
+            minimumDate: DateTime(2022),
+            mode: CupertinoDatePickerMode.date,
+            onDateTimeChanged: (DateTime newDate) {
+              setState(() => _selectedDate = newDate);
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -99,7 +129,9 @@ class _NewTransactionState extends State<NewTransaction> {
                       ),
                     ),
                     TextButton(
-                      onPressed: _presentDatePicker,
+                      onPressed: Platform.isIOS
+                          ? _presentCupertinoDatePicker
+                          : _presentMaterialDatePicker,
                       child: Text(
                         'Choose Date',
                         style: TextStyle(
