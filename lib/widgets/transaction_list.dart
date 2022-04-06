@@ -1,6 +1,6 @@
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/transaction_item.dart';
 import '../models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
@@ -37,42 +37,10 @@ class TransactionList extends StatelessWidget {
         // Builder is preferred
         : ListView.builder(
             itemBuilder: (ctx, index) {
-              return Card(
-                elevation: 5,
-                margin: const EdgeInsets.symmetric(
-                  vertical: 8,
-                  horizontal: 5,
-                ),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    radius: 30,
-                    child: Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: FittedBox(
-                        child: Text(
-                          '\$${transactions[index].amount}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  title: Text(
-                    transactions[index].title,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  subtitle: Text(
-                    DateFormat.yMMMd().format(transactions[index].date),
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    color: themeErrorColor,
-                    onPressed: () => deleteTx(transactions[index].id),
-                  ),
-                ),
-              );
+              return TransactionItem(
+                  transaction: transactions[index],
+                  themeErrorColor: themeErrorColor,
+                  deleteTx: deleteTx);
             },
             itemCount: transactions.length,
             // Instead of a array of widgets, use map method (toList)
