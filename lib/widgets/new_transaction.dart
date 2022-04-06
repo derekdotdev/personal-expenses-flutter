@@ -1,8 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../widgets/adaptive_flat_button.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addTx;
@@ -17,7 +17,6 @@ class _NewTransactionState extends State<NewTransaction> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
-  DateTime date = DateTime.now();
 
   void _submitData() {
     final _enteredTitle = _titleController.text;
@@ -70,7 +69,7 @@ class _NewTransactionState extends State<NewTransaction> {
         child: SafeArea(
           top: false,
           child: CupertinoDatePicker(
-            initialDateTime: date,
+            initialDateTime: DateTime.now(),
             minimumDate: DateTime(2022),
             mode: CupertinoDatePickerMode.date,
             onDateTimeChanged: (DateTime newDate) {
@@ -84,6 +83,9 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final _isLandscape = mediaQuery.orientation == Orientation.landscape;
+
     return SingleChildScrollView(
       child: Card(
         elevation: 5,
@@ -128,18 +130,10 @@ class _NewTransactionState extends State<NewTransaction> {
                             : 'Picked Date: ${DateFormat.yMd().format(_selectedDate!)}',
                       ),
                     ),
-                    TextButton(
-                      onPressed: Platform.isIOS
-                          ? _presentCupertinoDatePicker
-                          : _presentMaterialDatePicker,
-                      child: Text(
+                    AdaptiveFlatButton(
                         'Choose Date',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
+                        _presentCupertinoDatePicker,
+                        _presentMaterialDatePicker),
                   ],
                 ),
               ),

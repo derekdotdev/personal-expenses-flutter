@@ -114,7 +114,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
     final _isLandscape = mediaQuery.orientation == Orientation.landscape;
-
     final PreferredSizeWidget appBar = AppBar(
       title: const Text('Personal Expenses'),
       actions: [
@@ -125,9 +124,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
+    final preferredSizeValue = (mediaQuery.size.height -
+        mediaQuery.padding.top -
+        appBar.preferredSize.height);
+
+    final pageBody = SafeArea(
+      child: SingleChildScrollView(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -151,27 +153,19 @@ class _MyHomePageState extends State<MyHomePage> {
             // Weekly Transactions Chart
             if (!_isLandscape)
               SizedBox(
-                height: (mediaQuery.size.height -
-                        mediaQuery.padding.top -
-                        appBar.preferredSize.height) *
-                    0.3,
+                height: preferredSizeValue * 0.3,
                 child: Chart(_recentTransactions),
               ),
             if (!_isLandscape)
               SizedBox(
-                height: (mediaQuery.size.height -
-                        mediaQuery.padding.top -
-                        appBar.preferredSize.height) *
-                    0.7,
+                height: preferredSizeValue * 0.7,
                 child: TransactionList(_userTransactions, _deleteTransaction),
               ),
+            // Choose between Chart and TransactionList
             if (_isLandscape)
               _showChart
                   ? SizedBox(
-                      height: (mediaQuery.size.height -
-                              mediaQuery.padding.top -
-                              appBar.preferredSize.height) *
-                          0.7,
+                      height: preferredSizeValue * 0.7,
                       child: Chart(_recentTransactions),
                     )
                   // List of Transactions
@@ -186,6 +180,11 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+    );
+
+    return Scaffold(
+      appBar: appBar,
+      body: pageBody,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Platform.isIOS
           ? Container()
