@@ -13,21 +13,23 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty
-        ? Column(
-            children: [
-              const Text('No transactions added yet!'),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: 200,
-                child: Image.asset(
-                  'assets/images/waiting.png',
-                  fit: BoxFit.cover,
+        ? LayoutBuilder(builder: (ctx, constraints) {
+            return Column(
+              children: [
+                const Text('No transactions added yet!'),
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-            ],
-          )
+                SizedBox(
+                  height: constraints.maxHeight * 0.6,
+                  child: Image.asset(
+                    'assets/images/waiting.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            );
+          })
         // ListView loads all children (even what's not visible)
         // ListView.builder() only loads what's visible on screen!
         // Builder is preferred
@@ -48,7 +50,7 @@ class TransactionList extends StatelessWidget {
                       child: FittedBox(
                         child: Text(
                           '\$${transactions[index].amount}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -63,7 +65,7 @@ class TransactionList extends StatelessWidget {
                     DateFormat.yMMMd().format(transactions[index].date),
                   ),
                   trailing: IconButton(
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                     color: Theme.of(context).errorColor,
                     onPressed: () => deleteTx(transactions[index].id),
                   ), // Implement trash can IconButton to delete
