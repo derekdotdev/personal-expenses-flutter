@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -83,9 +85,6 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
-    final _isLandscape = mediaQuery.orientation == Orientation.landscape;
-
     return SingleChildScrollView(
       child: Card(
         elevation: 5,
@@ -130,10 +129,10 @@ class _NewTransactionState extends State<NewTransaction> {
                             : 'Picked Date: ${DateFormat.yMd().format(_selectedDate!)}',
                       ),
                     ),
-                    AdaptiveFlatButton(
-                        'Choose Date',
-                        _presentCupertinoDatePicker,
-                        _presentMaterialDatePicker),
+
+                    // Platform-dependent Button to choose date
+                    AdaptiveFlatButton('Choose Date',
+                        _presentCupertinoDatePicker, _presentMaterialDatePicker)
                   ],
                 ),
               ),

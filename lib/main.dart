@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './widgets/new_transaction.dart';
@@ -110,6 +109,49 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  List<Widget> _buildLandscapeContent(double preferredSizeValue) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('Show Chart'),
+          Switch.adaptive(
+            activeColor: Colors.amber,
+            value: _showChart,
+            onChanged: (val) {
+              setState(() {
+                _showChart = val;
+              });
+            },
+          ),
+        ],
+      ),
+      _showChart
+          ? SizedBox(
+              height: preferredSizeValue * 0.7,
+              child: Chart(_recentTransactions),
+            )
+          // List of Transactions
+          : SizedBox(
+              height: (preferredSizeValue) * 0.7,
+              child: TransactionList(_userTransactions, _deleteTransaction),
+            )
+    ];
+  }
+
+  List<Widget> _buildPortraitContent(preferredSizeValue) {
+    return [
+      SizedBox(
+        height: preferredSizeValue * 0.3,
+        child: Chart(_recentTransactions),
+      ),
+      SizedBox(
+        height: preferredSizeValue * 0.7,
+        child: TransactionList(_userTransactions, _deleteTransaction),
+      )
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
@@ -134,49 +176,12 @@ class _MyHomePageState extends State<MyHomePage> {
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            if (_isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Show Chart'),
-                  Switch.adaptive(
-                    activeColor: Colors.amber,
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            // Weekly Transactions Chart
-            if (!_isLandscape)
-              SizedBox(
-                height: preferredSizeValue * 0.3,
-                child: Chart(_recentTransactions),
-              ),
-            if (!_isLandscape)
-              SizedBox(
-                height: preferredSizeValue * 0.7,
-                child: TransactionList(_userTransactions, _deleteTransaction),
-              ),
-            // Choose between Chart and TransactionList
-            if (_isLandscape)
-              _showChart
-                  ? SizedBox(
-                      height: preferredSizeValue * 0.7,
-                      child: Chart(_recentTransactions),
-                    )
-                  // List of Transactions
-                  : SizedBox(
-                      height: (mediaQuery.size.height -
-                              mediaQuery.padding.top -
-                              appBar.preferredSize.height) *
-                          0.7,
-                      child: TransactionList(
-                          _userTransactions, _deleteTransaction),
-                    ),
+            // Landscape Orientation
+            // Spread operator handles returned list<widget>
+            if (_isLandscape) ..._buildLandscapeContent(preferredSizeValue),
+            // Portrait Orientation
+            // Spread operator handles returned list<widget>
+            if (!_isLandscape) ..._buildPortraitContent(preferredSizeValue),
           ],
         ),
       ),

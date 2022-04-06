@@ -17,13 +17,14 @@ class AdaptiveFlatButton extends StatelessWidget {
             child: Text(
               label,
               style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            onPressed: () => iOSFunction,
+            onPressed: () => iOSFunction(),
           )
         : TextButton(
-            onPressed: () => androidFunction,
+            onPressed: () => androidFunction(),
             child: Text(
               'Choose Date',
               style: TextStyle(
